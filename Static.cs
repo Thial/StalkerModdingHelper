@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,9 @@ namespace StalkerModdingHelper
 {
     public static class Static
     {
+        [DllImport("user32.dll", CharSet=CharSet.Auto,ExactSpelling=true)]
+        public static extern IntPtr SetFocus(HandleRef hWnd);
+        
         public static Dictionary<string,string> ReadConfig()
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -19,7 +23,7 @@ namespace StalkerModdingHelper
             var filePath = $"{fileDirectory}\\Config.ini";
             
             if (File.Exists(filePath) == false)
-                throw new Exception("The Config.ini file is missing. Please run Config.exe to generate it.");
+                throw new Exception($"The Config.ini file is missing at {filePath}.\nPlease run Config.exe to generate it.");
             
             var lines = File.ReadLines(filePath);
             var dict = new Dictionary<string, string>();
@@ -153,10 +157,24 @@ namespace StalkerModdingHelper
 
         public static bool IsStalkerRunning(Dictionary<string,string> config)
         {
+            var stalkerProcess = GetStalkerProcess(config);
+            return stalkerProcess != null;
+        }
+
+        public static Process GetStalkerProcess(Dictionary<string,string> config)
+        {
             var stalkerExecutable = GetStalkerExecutable(config);
             var processlist = Process.GetProcesses();
-            var anomalyProcess = processlist.FirstOrDefault(p => p.ProcessName == stalkerExecutable.Name);
-            return anomalyProcess != null;
+            return processlist.FirstOrDefault(p => p.ProcessName == stalkerExecutable.Name);
+        }
+
+        public static void FocusStalkerWindow(Dictionary<string, string> config)
+        {
+            var stalkerProcess = GetStalkerProcess(config);
+            if (stalkerProcess is null)
+                return;
+
+            SetFocus(new HandleRef(null, stalkerProcess.MainWindowHandle));
         }
 
         public static void CreateTriggerScript(Dictionary<string, string> config)
@@ -186,7 +204,7 @@ function update(time)
     next_update = time + 1000
 
     local path = [[{config["StalkerPath"]}\bin\stalker_modding_helper.txt]]
-    log('# [STALKER MODDING HELPER] Waiting for trigger: ' .. path)
+    --log('# [STALKER MODDING HELPER] Waiting for trigger: ' .. path)
     local file = io.open(path,'r')
     if file == nil then
         return
@@ -199,7 +217,7 @@ function update(time)
         return
     end
 
-    log('- [STALKER MODDING HELPER] Received load trigger')
+    --log('- [STALKER MODDING HELPER] Received load trigger')
 
     file = io.open(path,'w')
     if file == nil then

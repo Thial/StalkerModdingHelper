@@ -33,19 +33,25 @@ namespace StalkerModdingHelper
             var modDirectories = Static.GetModDirectories(config);
             var copyModTasks = modDirectories.Select(modDirectory => Static.ProcessModDirectory(config, modDirectory));
             await Task.WhenAll(copyModTasks);
+            
+            Console.WriteLine("Done.");
 
             if (Static.IsAutoRunEnabled(config) == false)
                 return;
 
             if (Static.IsStalkerRunning(config))
             {
+                Console.WriteLine("Reloading S.T.A.L.K.E.R.");
                 Static.CreateTriggerScript(config);
                 Static.CreateTriggerFile(config);
+                Static.FocusStalkerWindow(config);
             }
             else
             {
+                Console.WriteLine("Launching S.T.A.L.K.E.R.");
                 Static.CreateTriggerScript(config);
                 Static.StartStalker(config);
+                Static.FocusStalkerWindow(config);
             }
         }
     }
