@@ -10,6 +10,9 @@ I am able to work in my mod's directory and when I'm ready to test the changes I
 
 [![Stalker Modding Helper Showcase](https://img.youtube.com/vi/8EUCIZlSeWg/0.jpg)](https://www.youtube.com/watch?v=8EUCIZlSeWg)
 
+## Requirements
+
+In order for the application to run you need to download and install [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net48-web-installer)
 
 ## Configuration
 
