@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,7 +19,7 @@ namespace StalkerModdingHelper
             var filePath = $"{fileDirectory}\\Config.ini";
             
             if (File.Exists(filePath) == false)
-                PrintError("The Config.ini file is missing. Please run Config.exe to generate it.");
+                throw new Exception("The Config.ini file is missing. Please run Config.exe to generate it.");
             
             var lines = File.ReadLines(filePath);
             var dict = new Dictionary<string, string>();
@@ -30,8 +31,8 @@ namespace StalkerModdingHelper
                 if (split.Length != 2)
                     continue;
                 
-                if (dict.ContainsKey(split[0]) == false)
-                    dict.Add(split[0], split[1]);
+                if (dict.ContainsKey(split[0].Trim()) == false)
+                    dict.Add(split[0].Trim(), split[1].Trim());
             }
 
             var validationMessage = new StringBuilder();
@@ -47,7 +48,7 @@ namespace StalkerModdingHelper
             if (validationMessage.Length > 0)
             {
                 validationMessage.AppendLine("Please run Config.exe to configure the application.");
-                PrintError(validationMessage.ToString());
+                throw new Exception(validationMessage.ToString());
             }
 
             return dict;
@@ -56,7 +57,7 @@ namespace StalkerModdingHelper
         public static void ValidatePaths(Dictionary<string, string> config)
         {
             if (Directory.Exists(config["StalkerPath"]) == false)
-                PrintError($"The StalkerPath {config["StalkerPath"]} does not exist.");
+                throw new Exception($"The StalkerPath {config["StalkerPath"]} does not exist.");
 
             foreach (var kvp in config)
             {
@@ -64,7 +65,7 @@ namespace StalkerModdingHelper
                     continue;
                 
                 if (Directory.Exists(kvp.Value) == false)
-                    PrintError($"The {kvp.Key} {kvp.Value} does not exist.");
+                    throw new Exception($"The {kvp.Key} {kvp.Value} does not exist.");
             }
         }
 
@@ -117,6 +118,126 @@ namespace StalkerModdingHelper
             var tasks = modDirectory.Files.Select(file => ProcessModFile(config, modDirectory, file));
             await Task.WhenAll(tasks);
         }
+
+        public static StalkerExecutable GetStalkerExecutable(Dictionary<string,string> config)
+        {
+            var stalkerExecutable = config["StalkerExecutable"];
+            var stalkerExecutableRawFileInfo = new FileInfo(stalkerExecutable);
+            if (stalkerExecutableRawFileInfo.Exists)
+            {
+                return new StalkerExecutable(stalkerExecutable, stalkerExecutable.TrimEnd(".exe"));
+            }
+
+            var fileName = stalkerExecutable.TrimEnd(".exe");
+            var filePath = $"{config["StalkerPath"]}\\bin\\{fileName}.exe";
+            var stalkerExecutableConstructedFileInfo = new FileInfo(filePath);
+            if (stalkerExecutableConstructedFileInfo.Exists)
+            {
+                return new StalkerExecutable(filePath, fileName);
+            }
+            
+            throw new Exception($"Could not locate the Stalker executable \"{stalkerExecutable}\". " +
+                       $"Please update Config.ini and change the \"StalkerExecutable\" " +
+                       $"value to either a vaild Stalker executable name or a full path");
+        }
+
+        public static bool IsAutoRunEnabled(Dictionary<string, string> config)
+        {
+            if (config.ContainsKey("AutoRun") == false)
+                return false;
+
+            var value = config["AutoRun"].ToLower();
+            
+            return value is "true" or "t" or "yes" or "y" or "1";
+        }
+
+        public static bool IsStalkerRunning(Dictionary<string,string> config)
+        {
+            var stalkerExecutable = GetStalkerExecutable(config);
+            var processlist = Process.GetProcesses();
+            var anomalyProcess = processlist.FirstOrDefault(p => p.ProcessName == stalkerExecutable.Name);
+            return anomalyProcess != null;
+        }
+
+        public static void CreateTriggerScript(Dictionary<string, string> config)
+        {
+            var code = $@"
+local first_update = false
+local next_update = time_global() + 1000
+
+function on_game_start()  
+    exec_console_cmd('g_always_active on') 
+    level.add_call(on_update,function() end)
+end
+
+function on_update()
+    if db.actor == nil then
+        return
+    end
+
+    update(time_global())
+end
+
+function update(time)
+    if time < next_update then
+        return
+    end   
+
+    next_update = time + 1000
+
+    local path = [[{config["StalkerPath"]}\bin\stalker_modding_helper.txt]]
+    log('# [STALKER MODDING HELPER] Waiting for trigger: ' .. path)
+    local file = io.open(path,'r')
+    if file == nil then
+        return
+    end
+
+    local save = file:read()
+    file:close()
+
+    if save == nil or save == """" then
+        return
+    end
+
+    log('- [STALKER MODDING HELPER] Received load trigger')
+
+    file = io.open(path,'w')
+    if file == nil then
+        return
+    end
+
+    file:write("""")
+    file:close()
+
+    exec_console_cmd('load ' .. save)
+end";
+
+            var scriptsPath = $"{config["StalkerPath"]}\\gamedata\\scripts";
+            Directory.CreateDirectory(scriptsPath);
+            
+            using Stream script = File.Open($"{scriptsPath}\\stalker_modding_helper.script", FileMode.Create);
+            var encoding = Encoding.GetEncoding(1252);
+            var saveNameBuffer = encoding.GetBytes(code);
+            script.Write(saveNameBuffer, 0, saveNameBuffer.Length);
+        }
+
+        public static void CreateTriggerFile(Dictionary<string, string> config)
+        {
+            using Stream trigger = File.Open($"{config["StalkerPath"]}\\bin\\stalker_modding_helper.txt", FileMode.Create);
+            var saveNameBuffer = System.Text.Encoding.UTF8.GetBytes(config["SaveName"].TrimEnd(".sav"));
+            trigger.Write(saveNameBuffer, 0, saveNameBuffer.Length);
+        }
+
+        public static void StartStalker(Dictionary<string,string> config)
+        {
+            var stalkerExecutable = GetStalkerExecutable(config);
+            var saveName = config["SaveName"].TrimEnd(".sav");
+            
+            var stalkerProcess = new Process();
+            stalkerProcess.StartInfo.FileName = stalkerExecutable.Path;
+            stalkerProcess.StartInfo.Arguments = $"-dbg -nocache -cls -start server({saveName}/single/alife/load) client(localhost)";
+            stalkerProcess.Start();
+        }
         
         #region Implementation
         static bool FileEquals(this FileInfo first, FileInfo second)
@@ -130,11 +251,22 @@ namespace StalkerModdingHelper
         {
             Directory.CreateDirectory(second.DirectoryName);
             Console.WriteLine($"Copying {first.FullName}");
-            using (Stream source = File.Open(first.FullName, FileMode.Open))
+            var happy = false;
+            while (happy == false)
             {
-                using(Stream destination = File.Create(second.FullName))
+                try
                 {
-                    await source.CopyToAsync(destination);
+                    using var inputFileStream = new FileStream(first.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    using var streamReader = new StreamReader(inputFileStream, Encoding.Default);
+                    var fileData = await streamReader.ReadToEndAsync();
+                    using var outputFileStream = new FileStream(second.FullName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                    using var streamWriter = new StreamWriter(outputFileStream, Encoding.Default);
+                    await streamWriter.WriteAsync(fileData);
+                    happy = true;
+                }
+                catch
+                {
+                    Console.WriteLine($"Failed to copy file: {first.FullName}. Retrying...");
                 }
             }
         }
@@ -167,11 +299,15 @@ namespace StalkerModdingHelper
             return source;
         }
         
-        static void PrintError(string message)
+        static string TrimEnd(this string source, string pattern)
         {
-            Console.WriteLine(message);
-            Console.ReadKey();
-            Environment.Exit(0);
+            if (string.IsNullOrEmpty(pattern))
+                return source;
+
+            if (source.EndsWith(pattern))
+                return source.Substring(0, source.Length - pattern.Length);
+
+            return source;
         }
         #endregion
     }

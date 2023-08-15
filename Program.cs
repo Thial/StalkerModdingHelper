@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +11,15 @@ namespace StalkerModdingHelper
     {
         public static async Task Main(string[] args)
         {
-            await new Helper().Run();
+            try
+            {
+                await new Helper().Run();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.ReadKey();
+            }
         }
     }
 
@@ -22,16 +31,21 @@ namespace StalkerModdingHelper
             Static.ValidatePaths(config);
             
             var modDirectories = Static.GetModDirectories(config);
+            var copyModTasks = modDirectories.Select(modDirectory => Static.ProcessModDirectory(config, modDirectory));
+            await Task.WhenAll(copyModTasks);
 
-            try
+            if (Static.IsAutoRunEnabled(config) == false)
+                return;
+
+            if (Static.IsStalkerRunning(config))
             {
-                var copyModTasks = modDirectories.Select(modDirectory => Static.ProcessModDirectory(config, modDirectory));
-                await Task.WhenAll(copyModTasks);
+                Static.CreateTriggerScript(config);
+                Static.CreateTriggerFile(config);
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e);
-                Console.ReadKey();
+                Static.CreateTriggerScript(config);
+                Static.StartStalker(config);
             }
         }
     }
