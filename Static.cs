@@ -182,13 +182,21 @@ namespace StalkerModdingHelper
             var code = $@"
 local first_update = false
 local next_update = time_global() + 1000
+local unpaused = false
 
 function on_game_start()  
-    exec_console_cmd('g_always_active on') 
+    get_console():execute('keypress_on_start off') 
+    get_console():execute('g_always_active on') 
     level.add_call(on_update,function() end)
 end
 
 function on_update()
+    if device():is_paused() and unpaused == false then
+        device():pause(false)
+        unpaused = true
+        return
+    end
+    
     if db.actor == nil then
         return
     end
@@ -204,7 +212,6 @@ function update(time)
     next_update = time + 1000
 
     local path = [[{config["StalkerPath"]}\bin\stalker_modding_helper.txt]]
-    --log('# [STALKER MODDING HELPER] Waiting for trigger: ' .. path)
     local file = io.open(path,'r')
     if file == nil then
         return
@@ -217,8 +224,6 @@ function update(time)
         return
     end
 
-    --log('- [STALKER MODDING HELPER] Received load trigger')
-
     file = io.open(path,'w')
     if file == nil then
         return
@@ -227,7 +232,7 @@ function update(time)
     file:write("""")
     file:close()
 
-    exec_console_cmd('load ' .. save)
+    get_console():execute('load ' .. save)
 end";
 
             var scriptsPath = $"{config["StalkerPath"]}\\gamedata\\scripts";
