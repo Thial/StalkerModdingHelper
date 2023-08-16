@@ -1,0 +1,67 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="AccentNormal">#4e9929</Color>
+    <SolidColorBrush x:Key="AccentNormalBrush" Color="{DynamicResource AccentNormal}" />
+
+    <Color x:Key="AccentLight">#7ef542</Color>
+    <SolidColorBrush x:Key="AccentLightBrush" Color="{DynamicResource AccentLight}" />
+
+    <Color x:Key="AccentDark">#274d15</Color>
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="{DynamicResource AccentDark}" />
+
+    <Color x:Key="RedNormal">#ab6666</Color>
+    <SolidColorBrush x:Key="RedNormalBrush" Color="{DynamicResource RedNormal}" />
+
+    <Color x:Key="RedLight">#f1adad</Color>
+    <SolidColorBrush x:Key="RedLightBrush" Color="{DynamicResource RedLight}" />
+
+    <Color x:Key="RedDark">#6f3636</Color>
+    <SolidColorBrush x:Key="RedDarkBrush" Color="{DynamicResource RedDark}" />
+
+    <Color x:Key="BackgroundLight">#424242</Color>
+    <SolidColorBrush x:Key="BackgroundLightBrush" Color="{DynamicResource BackgroundLight}" />
+
+    <Color x:Key="BackgroundNormal">#252525</Color>
+    <SolidColorBrush x:Key="BackgroundNormalBrush" Color="{DynamicResource BackgroundNormal}" />
+
+    <Color x:Key="BackgroundDark">#161616</Color>
+    <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{DynamicResource BackgroundDark}" />
+
+    <Color x:Key="NameColor1">#ff7f7f</Color>
+    <SolidColorBrush x:Key="NameColor1Brush" Color="{DynamicResource NameColor1}" />
+    <Color x:Key="NameColor2">#ffaa7f</Color>
+    <SolidColorBrush x:Key="NameColor2Brush" Color="{DynamicResource NameColor2}" />
+    <Color x:Key="NameColor3">#ffd47f</Color>
+    <SolidColorBrush x:Key="NameColor3Brush" Color="{DynamicResource NameColor3}" />
+    <Color x:Key="NameColor4">#ffff7f</Color>
+    <SolidColorBrush x:Key="NameColor4Brush" Color="{DynamicResource NameColor4}" />
+    <Color x:Key="NameColor5">#d4ff7f</Color>
+    <SolidColorBrush x:Key="NameColor5Brush" Color="{DynamicResource NameColor5}" />
+    <Color x:Key="NameColor6">#aaff7f</Color>
+    <SolidColorBrush x:Key="NameColor6Brush" Color="{DynamicResource NameColor6}" />
+    <Color x:Key="NameColor7">#7fff7f</Color>
+    <SolidColorBrush x:Key="NameColor7Brush" Color="{DynamicResource NameColor7}" />
+    <Color x:Key="NameColor8">#7fffaa</Color>
+    <SolidColorBrush x:Key="NameColor8Brush" Color="{DynamicResource NameColor8}" />
+    <Color x:Key="NameColor9">#7fffd4</Color>
+    <SolidColorBrush x:Key="NameColor9Brush" Color="{DynamicResource NameColor9}" />
+    <Color x:Key="NameColor10">#7fffff</Color>
+    <SolidColorBrush x:Key="NameColor10Brush" Color="{DynamicResource NameColor10}" />
+    <Color x:Key="NameColor11">#7fd4ff</Color>
+    <SolidColorBrush x:Key="NameColor11Brush" Color="{DynamicResource NameColor11}" />
+    <Color x:Key="NameColor12">#7faaff</Color>
+    <SolidColorBrush x:Key="NameColor12Brush" Color="{DynamicResource NameColor12}" />
+    <Color x:Key="NameColor13">#7f7fff</Color>
+    <SolidColorBrush x:Key="NameColor13Brush" Color="{DynamicResource NameColor13}" />
+    <Color x:Key="NameColor14">#aa7fff</Color>
+    <SolidColorBrush x:Key="NameColor14Brush" Color="{DynamicResource NameColor14}" />
+    <Color x:Key="NameColor15">#d47fff</Color>
+    <SolidColorBrush x:Key="NameColor15Brush" Color="{DynamicResource NameColor15}" />
+    <Color x:Key="NameColor16">#ff7fff</Color>
+    <SolidColorBrush x:Key="NameColor16Brush" Color="{DynamicResource NameColor16}" />
+    <Color x:Key="NameColor17">#ff7fd4</Color>
+    <SolidColorBrush x:Key="NameColor17Brush" Color="{DynamicResource NameColor17}" />
+    <Color x:Key="NameColor18">#ff7faa</Color>
+    <SolidColorBrush x:Key="NameColor18Brush" Color="{DynamicResource NameColor18}" />
+</ResourceDictionary>
