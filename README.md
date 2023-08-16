@@ -1,10 +1,12 @@
 # Welcome Stalker
 
-Stalker Modding Helper is a little tool which allows you to copy the mods you are working on to your dev S.T.A.L.K.E.R. Anomaly installation and either launches the game when it's not running + loads a save automatically or just sends a command to the game to reload your testing save. The tool only copies files which were changed by using MD5 hash validation.
+Stalker Modding Helper is a little tool which allows you to copy the mods you are working on to your dev S.T.A.L.K.E.R. Anomaly installation and either launches the game when it's not running + loads a save automatically or just sends a command to the game to reload your testing save. The tool only copies files which were changed by using MD5 hash validation. This tool does not work with MO2 as the way it works is not compatible with it.
 
 Here's an example:
 - My Anomaly installed at **`D:\Anomaly Development`**
 - My mod is located at **`D:\Zone Link\ZoneLinkMod`**
+
+![Anime Grass](https://i.imgur.com/Nd7NYDs.png)
 
 I am able to work in my mod's directory and when I'm ready to test the changes I can run the Stalker Modding Helper and copy the files to my Anomaly installation and automatically start the game with an automatic save load or just reload the save:
 
@@ -13,15 +15,16 @@ I am able to work in my mod's directory and when I'm ready to test the changes I
 ## Requirements
 
 In order for the application to run you need to download and install [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net48-web-installer)
+Also please don't forget to edit Config.ini and adjust the values.
 
 ## Configuration
 
 Initially the tool comes with a very simple configuration in the form of a **`Config.ini`** file which has to be placed next to **`StalkerModdingHelper.exe`**
 
 ### Currently supported values:
-- **`StalkerPath`** - Defines the Anomaly installation directory. 
+- **`StalkerPath`** - Defines the Anomaly installation directory (where the bin and gamedata folders reside). 
 - **`StalkerExecutable`** - Defines either the path of the executable you want to run or just its name.
-- **`ModPath`** - Comma separated mod directories which you want to copy to your Anomaly installation.
+- **`ModPath`** - Comma separated mod directories (where the bin and gamedata folders reside) which you want to copy to your Anomaly installation.
 - **`SkipExtension`** - Comma separated file extensions which you don't want to copy automatically.
 - **`SaveName`** - The name of the save file you want to load. It's good to name it something simple like `testing`.
 - **`AutoRun`** - If set to True will automatically start Anomaly or reload the save.
