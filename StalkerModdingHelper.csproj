@@ -14,6 +14,7 @@
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <LangVersion>10</LangVersion>
+        <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,6 +47,9 @@
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="StalkerExecutable.cs" />
         <Compile Include="Static.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Resources\icon.ico" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
