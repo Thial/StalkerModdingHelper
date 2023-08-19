@@ -1,8 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StalkerModdingHelperConfigurator", "StalkerModdingHelperConfigurator\StalkerModdingHelperConfigurator.csproj", "{591A7C34-B789-45C7-843E-B4B53E373D37}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3B0AC56A-803F-4E58-8D7D-3378BC93AF56} = {3B0AC56A-803F-4E58-8D7D-3378BC93AF56}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StalkerModdingHelper", "StalkerModdingHelper\StalkerModdingHelper.csproj", "{1CA14176-ED49-40C0-A53E-25357E72A0CE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3B0AC56A-803F-4E58-8D7D-3378BC93AF56} = {3B0AC56A-803F-4E58-8D7D-3378BC93AF56}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StalkerModdingHelperLib", "StalkerModdingHelperLib\StalkerModdingHelperLib.csproj", "{3B0AC56A-803F-4E58-8D7D-3378BC93AF56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,5 +28,13 @@ Global
 		{1CA14176-ED49-40C0-A53E-25357E72A0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CA14176-ED49-40C0-A53E-25357E72A0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CA14176-ED49-40C0-A53E-25357E72A0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CA14176-ED49-40C0-A53E-25357E72A0CE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1CA14176-ED49-40C0-A53E-25357E72A0CE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{3B0AC56A-803F-4E58-8D7D-3378BC93AF56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B0AC56A-803F-4E58-8D7D-3378BC93AF56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B0AC56A-803F-4E58-8D7D-3378BC93AF56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B0AC56A-803F-4E58-8D7D-3378BC93AF56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B0AC56A-803F-4E58-8D7D-3378BC93AF56}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3B0AC56A-803F-4E58-8D7D-3378BC93AF56}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

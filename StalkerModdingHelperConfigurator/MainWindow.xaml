@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:StalkerModdingHelperConfigurator.Controls"
         mc:Ignorable="d"
         Title="Stalker Modding Helper Configurator"
         MinHeight="624"
@@ -74,8 +75,11 @@
                   ClipToBounds="True">
                 <Border SnapsToDevicePixels="True"
                         Background="#141414"
-                        Padding="0 0 0 0">
-                    <!--BODY-->
+                        Padding="20 20 20 20">
+                    <StackPanel Orientation="Vertical">
+                        <TextBox x:Name="GamePathTextBlock"
+                                 Tag="Stalker Path"/>
+                    </StackPanel>
                 </Border>
             </Grid>
         </Grid>
