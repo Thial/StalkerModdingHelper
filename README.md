@@ -2,8 +2,6 @@
 
 Stalker Modding Helper is a little tool which allows you to copy the mods you are working on to your dev S.T.A.L.K.E.R. Anomaly installation and either launches the game when it's not running + loads a save automatically or just sends a command to the game to reload your testing save. The tool only copies files which were changed by using MD5 hash validation. 
 
-This tool does not fully work with MO2 as it can't force it to launch the game.
-
 Here's an example:
 - My Anomaly is installed at **`D:\Anomaly Development`**
 - My mod is located at **`D:\Zone Link\ZoneLinkMod`**
@@ -16,36 +14,140 @@ I am able to work in my mod's directory and when I'm ready to test the changes I
 
 [![Stalker Modding Helper Showcase](https://img.youtube.com/vi/8EUCIZlSeWg/0.jpg)](https://www.youtube.com/watch?v=8EUCIZlSeWg)
 
+
+
 ## Requirements
 
 In order for the application to run you need to download and install [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net48-web-installer)
+
+
 
 ## Installation
 
 Simply unpack the software wherever you want to. You can either use a single instance or multiple instances per each mod.
 
-Afterwards configure **`Config.ini`** and close Anomaly if it's already running as the software will also create a special script **`stalker_modding_helper.script`** in your Anomaly installation when it runs which is required for save reloading.
+Afterwards configure **`StalkerModdingHelper.ini`** and close Anomaly if it's already running as the software will also create a special script **`stalker_modding_helper.script`** in your Anomaly installation when it runs which is required for save reloading.
+
+
 
 ## Configuration
 
-Initially the tool comes with a very simple configuration in the form of a **`Config.ini`** file which has to be placed next to **`StalkerModdingHelper.exe`**
+Initially the tool comes with a very simple configuration in the form of a **`StalkerModdingHelper.ini`** file which has to be placed next to **`StalkerModdingHelper.exe`**
 
-### Currently supported values:
-- **`StalkerPath`** - Defines the Anomaly installation directory (where the bin and gamedata folders reside). 
-- **`StalkerExecutable`** - Defines either the path of the executable you want to run or just its name.
-- **`ModPath`** - Comma separated mod directories (where the bin and gamedata folders reside) which you want to copy to your Anomaly installation.
-- **`SkipExtension`** - Comma separated file extensions which you don't want to copy automatically.
+With the release of the 2.0 version the software supports directly working on a Stalker installation as well as working through Mod Organizer 2.
+
+The configuration for each of those methods is different therefore make sure that you will follow one of the guides below, not both.
+
+The config file underwent changes in terms of its structure. Now it supports sections very much like in stalker's LTX files.
+
+The base format is now a **`[StalkerModdingHelper]`** section which contains settings required for launching the game.
+
+As well as an infinite amount of mod sections like **`[My Cool Mod]`** which contain mod specific settings allowing multiple mods to be supported.
+
+The order in which the mods are listed in the config file dictates the order in which they will be either copied to Stalker or listed on the mod list.
+
+
+
+## Currently supported [StalkerModdingHelper] section values:
+
+- **`LaunchType`** - This setting changes how the game gets launched as well as what the other values from this section do.
+  - **1** - The game gets launched directly via the specified Stalker executable.
+  - **2** - The game gets launched through Mod Organizer 2 using the specified executable.
+
+- **`LaunchPath`** - The base path to launch from. This path differs based on which `LaunchType` was selected.
+  - `LaunchType` **1** - Root directory of Stalker installation.
+  - `LaunchType` **2** - Root directory of Mod Organizer 2
+
+- **`ExecutableName`** - The name of the executable to use. This name differs based on which `LaunchType` was selected.
+  - `LaunchType` **1** - The name of the executable from the bin folder. For example `AnomalyDX11`.
+  - `LaunchType` **2** - The name of the executable inside of Mod Organizer 2. For example `Anomaly (DX11)`.
+
+- **`ProfileName`** - (Only required for `LaunchType` **2**). The name of the MO2 profile you want to use. Usually `Default`.
+
 - **`SaveName`** - The name of the save file you want to load. It's good to name it something simple like `testing`.
-- **`AutoRun`** - If set to True will automatically start Anomaly or reload the save.
 
-### Example Configuration
+- **`AutoRun`** - If set to 1 the software will automatically start the game or reload the save.
+
+
+
+## Currently supported mod section values:
+
+- **`ModPath`** - The root directory of your mod (the one containing the bin/db/gamedata folders).
+
+- **`SkipExtension`** - Comma separated file extensions which you don't want to compare/copy. Useful for avoiding comparing/copying huge files which never change.
+
+
+
+## Method 1 - Working with Stalker directly
+
+The process is pretty much the same as before with the only difference being the config being slightly different.
+
+In this case we have 2 mods, `My Cool Mod` and `My Amazing Mod` which will be copied over in the order they are listed in.
+
+Example Configuration
 ```
-StalkerPath=D:\Anomaly Development
-StalkerExecutable=AnomalyDX11
-ModPath=D:\Zone Link\ZoneLinkMod
-SkipExtension=dds,seq,pe,pg,ogf
+[StalkerModdingHelper]
+LaunchType=1
+LaunchPath=D:\Anomaly
 SaveName=testing
-AutoRun=True
+AutoRun=1
+ExecutableName=AnomalyDX11
+
+[My Cool Mod]
+ModPath=D:\Mods\My Cool Mod
+
+[My Amazing Mod]
+ModPath=D:\Mods\My Amazing Mod
+SkipExtension=dds,ogf
+```
+
+## Method 2 - Working with Mod Organizer 2
+In the case of Mod Organizer 2 the process is slightly more complicated.
+
+This only works if your mods and configs are stored inside of the Mod Organizer 2 directory like: 
+- `D:\{MO2RootPath}\ModOrganizer.exe`
+- `D:\{MO2RootPath}\ModOrganizer.ini`
+- `D:\{MO2RootPath}\profiles\{SomeProfile}\modlist.txt`
+- `D:\{MO2RootPath}\mods`
+
+I might add the option to customize the paths later on.
+
+First of all we need to create a new executable which will contain special arguments allowing us to load the save file automatically.
+
+To do that we need to go to the `Modify Executables` window which can be accessed via the dropdown and `Edit` option.
+
+Afterwards we want to select the executable we want to copy (For example `Anomaly (DX11)`), click on the plus button above, and select `Clone selected`.
+
+![image](https://github.com/user-attachments/assets/3002419e-a033-4646-a43a-9dd31b2d32e7)
+
+Now we can rename our newly created executable to let's say `Anomaly Dev`
+
+![image](https://github.com/user-attachments/assets/02c328be-616f-4a9d-a25a-27a3cfc48b1c)
+
+You can also copy the same arguments as on the screenshot but they will also be updated automatically by the software upon each run.
+
+`-dbg -cls -nocache -start server(testing/single/alife/load) client(localhost)`
+
+Afterwards close Mod Organizer 2 as it will be overwriting changes to files if it stays open.
+
+**`One important note here is that the names of mod sections will be used to create mod folders as well as entries on the mod list. The order also matters.`**
+
+Example Configuration
+```
+[StalkerModdingHelper]
+LaunchType=2
+LaunchPath=D:\MO2
+SaveName=testing
+AutoRun=1
+ExecutableName=Anomaly Dev
+ProfileName=Default
+
+[My Cool Mod]
+ModPath=D:\Mods\My Cool Mod
+
+[My Amazing Mod]
+ModPath=D:\Mods\My Amazing Mod
+SkipExtension=dds,ogf
 ```
 
 ## Quality of Life
