@@ -1,0 +1,15 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using System.Diagnostics;
+global using System.IO;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using System.Reflection;
+global using System.Text.RegularExpressions;
+global using System.Runtime.InteropServices;
+global using System.Security.Cryptography;
+global using System.Text;
+global using StalkerModdingHelper.Enum;
+global using StalkerModdingHelper.Extensions;
+global using StalkerModdingHelper.Model;
+global using StalkerModdingHelper.Static;

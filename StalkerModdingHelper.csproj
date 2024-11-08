@@ -42,11 +42,22 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="StalkerDirectory.cs" />
+        <Compile Include="Enum\LaunchType.cs" />
+        <Compile Include="Extensions\FileInfoExtensions.cs" />
+        <Compile Include="Extensions\StringExtensions.cs" />
+        <Compile Include="GlobalUsings.cs" />
+        <Compile Include="Model\ConfigDto.cs" />
+        <Compile Include="Model\ConfigModDto.cs" />
         <Compile Include="Program.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="StalkerExecutable.cs" />
-        <Compile Include="Static.cs" />
+        <Compile Include="Static\ConfigParameterName.cs" />
+        <Compile Include="Static\ConfigReader.cs" />
+        <Compile Include="Static\ConfigValidator.cs" />
+        <Compile Include="Static\ConsoleHelper.cs" />
+        <Compile Include="Static\Launcher.cs" />
+        <Compile Include="Static\ModOrganizerConfig.cs" />
+        <Compile Include="Static\ModProcessor.cs" />
+        <Compile Include="Static\TriggerHelper.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Resources\icon.ico" />
