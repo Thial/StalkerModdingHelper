@@ -2,7 +2,8 @@
 {
     var config = ConfigReader.ReadConfig();
     ConfigValidator.ValidateAndCorrect(config);
-    await Task.WhenAll(config.Mods.Select(mod => ModProcessor.Process(config, mod)));
+    foreach (var mod in config.Mods)
+        await ModProcessor.Process(config, mod);
     ConsoleHelper.LogInformation(ConfigParameterName.StalkerModdingHelper, "Done.");
     Launcher.Launch(config);
 }

@@ -10,8 +10,8 @@ public static class ModProcessor
     public static async Task Process(ConfigDto config, ConfigModDto mod)
     {
         var paths = GetRelativeFilePaths(mod);
-        var fileTasks = paths.Select(path => ProcessModFile(config, mod, path));
-        await Task.WhenAll(fileTasks);
+        foreach (var path in paths)
+            await ProcessModFile(config, mod, path);
     }
     
     static string[] GetRelativeFilePaths(ConfigModDto mod)
