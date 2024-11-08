@@ -129,7 +129,8 @@ You can also copy the same arguments as on the screenshot but they will also be 
 `-dbg -cls -nocache -start server(testing/single/alife/load) client(localhost)`
 
 ```diff
-- Afterwards close Mod Organizer 2 as it will be overwriting changes to files if it stays open
+- Afterwards close Mod Organizer 2 as it will be overwriting changes to files if it stays open.
+- Always keep Mod Organizer 2 closed when you are using this tool as it will conflict with file changes done by this tool.
 ```
 
 **`One important note here is that the names of mod sections will be used to create mod folders as well as entries on the mod list. The order also matters.`**
