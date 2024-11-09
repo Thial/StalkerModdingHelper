@@ -7,11 +7,13 @@ public static class Launcher
         if (config.AutoRun == false)
             return;
 
-        if (IsStalkerRunning(config))
+        var stalkerProcess = GetStalkerProcess(config);
+        if (stalkerProcess != null)
         {
             ConsoleHelper.LogInformation(ConfigParameterName.StalkerModdingHelper, "Reloading S.T.A.L.K.E.R.");
             TriggerHelper.CreateTriggerScript(config);
             TriggerHelper.CreateTriggerFile(config);
+            WindowHelper.BringWindowToForeground(stalkerProcess);
         }
         else
         {
@@ -28,7 +30,7 @@ public static class Launcher
         }
     }
     
-    static bool IsStalkerRunning(ConfigDto config)
+    static Process GetStalkerProcess(ConfigDto config)
     {
         var processlist = Process.GetProcesses();
         var processName = config.LaunchType switch
@@ -37,7 +39,7 @@ public static class Launcher
             LaunchType.ModOrganizer => ModOrganizerConfig.GetStalkerExecutableName(config)
         };
         var stalkerProcess = processlist.FirstOrDefault(p => p.ProcessName == processName);
-        return stalkerProcess != null;
+        return stalkerProcess;
     }
     
     static void StartStalker(ConfigDto config)

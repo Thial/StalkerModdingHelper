@@ -58,6 +58,7 @@
         <Compile Include="Static\ModOrganizerConfig.cs" />
         <Compile Include="Static\ModProcessor.cs" />
         <Compile Include="Static\TriggerHelper.cs" />
+        <Compile Include="Static\WindowHelper.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Resources\icon.ico" />
