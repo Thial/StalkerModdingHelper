@@ -134,6 +134,7 @@ You can also copy the same arguments as on the screenshot but they will also be 
 ```
 
 **`One important note here is that the names of mod sections will be used to create mod folders as well as entries on the mod list. The order also matters.`**
+**`If the mod folders in MO2 already exist and you want to copy into them then make sure that the name of the mod section in StalkerModdingHelper.ini matches them.`**
 
 Example Configuration
 ```
